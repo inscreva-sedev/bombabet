@@ -194,6 +194,8 @@ export class AuthService {
       return { ok: false, error: 'Serviço de base de dados indisponível neste momento.' };
     }
 
+    await this.ensureDefaultAdmin();
+
     const identifier = input.identifier.trim().toLowerCase();
     const password = input.password;
     if (!identifier || !password) {
@@ -201,6 +203,7 @@ export class AuthService {
     }
 
     const user = await users.findOne({
+      systemKey: { $exists: false },
       $or: [{ emailLower: identifier }, { usernameLower: identifier }],
     });
 

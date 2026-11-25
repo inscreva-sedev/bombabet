@@ -6,8 +6,7 @@ import { ClientMessage, ServerMessage } from '@/shared/types';
 import { RoundManager } from '@/server/engine/roundManager';
 import { mongoService } from '@/server/db/mongo';
 import { authService } from '@/server/auth/authService';
-import { handleAuthHttpRequest } from '@/server/auth/authRoutes';
-import { handleAdminHttpRequest } from '@/server/admin/adminRoutes';
+import { setLiveRoundManager } from '@/server/serverless/httpHelpers';
 
 const dev =
   !process.argv.includes('--prod') && process.env.NODE_ENV !== 'production';
@@ -38,27 +37,12 @@ async function bootstrap() {
     getConnectedClientIds: () => Array.from(clients.keys()),
   });
 
+  setLiveRoundManager(roundManager);
   await roundManager.hydrateFromDatabase();
   roundManager.start();
 
-  const server = http.createServer(async (req, res) => {
-    try {
-      const handledAuth = await handleAuthHttpRequest(req, res, (userId, balance) => {
-        roundManager.syncUserBalanceFromAuth(userId, balance);
-      });
-      if (handledAuth) return;
-
-      const handledAdmin = await handleAdminHttpRequest(req, res, roundManager);
-      if (handledAdmin) return;
-
-      handle(req, res);
-    } catch (err) {
-      console.error('[HTTP server]', err);
-      if (!res.headersSent) {
-        res.statusCode = 500;
-        res.end('Internal Server Error');
-      }
-    }
+  const server = http.createServer((req, res) => {
+    handle(req, res);
   });
 
   const wss = new WebSocketServer({ noServer: true });

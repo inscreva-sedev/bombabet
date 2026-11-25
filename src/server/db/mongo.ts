@@ -2,10 +2,31 @@ import dns from 'node:dns';
 import fs from 'node:fs';
 import path from 'node:path';
 import { Collection, Db, MongoClient, ObjectId } from 'mongodb';
-import { PersonalBetRecord, UserRole, UserStatus } from '@/shared/types';
+import {
+  BetSlotState,
+  GameEngineConfig,
+  PersonalBetRecord,
+  UserRole,
+  UserStatus,
+} from '@/shared/types';
+
+export interface SystemRoundAnchor {
+  roundId: number;
+  startedAt: number;
+}
+
+export interface SystemAuditEntry {
+  id: string;
+  timestamp: number;
+  actorEmail: string;
+  action: string;
+  target: string;
+  details: string;
+}
 
 export interface UserDoc {
   _id: ObjectId;
+  systemKey?: string;
   username: string;
   usernameLower: string;
   email: string;
@@ -19,6 +40,13 @@ export interface UserDoc {
   currency: string;
   tokenVersion: number;
   aviatorBets?: PersonalBetRecord[];
+  aviatorActiveSlots?: {
+    1: BetSlotState;
+    2: BetSlotState;
+  };
+  engineConfig?: GameEngineConfig;
+  auditLogs?: SystemAuditEntry[];
+  roundAnchor?: SystemRoundAnchor;
   createdAt: Date;
   updatedAt: Date;
 }
