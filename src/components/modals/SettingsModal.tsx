@@ -134,7 +134,7 @@ export function SettingsModal({
               </span>
             </div>
             <p className="text-[11px] text-[#787b8a] leading-relaxed">
-              Esta aplicação utiliza exclusivamente créditos virtuais de demonstração, sem dinheiro real.
+              Saldo da sua carteira em {settings.currencyLabel} sincronizado com a sua conta.
             </p>
             <div className="flex items-center gap-2 pt-1">
               {[500, 1000, 5000].map((preset) => (
@@ -182,7 +182,7 @@ export function SettingsModal({
             <label className="flex items-center justify-between p-3 rounded-xl bg-[#121319] border border-[#252734] cursor-pointer">
               <span className="flex items-center gap-2.5 text-xs font-medium text-white">
                 <Users className="w-4 h-4 text-[#9ea2b0]" />
-                Mostrar jogadores simulados
+                Mostrar outros jogadores ao vivo
               </span>
               <input
                 type="checkbox"

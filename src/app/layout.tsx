@@ -2,8 +2,16 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Aviator — Simulador de Voo & Multiplicador',
-  description: 'Recriação interativa do jogo Aviator com créditos virtuais, motor de rondas no servidor e dois painéis independentes de apostas.',
+  title: 'Aviator — Bombabet',
+  description:
+    'Jogue Aviator na Bombabet. Acompanhe o voo em tempo real, aposte com dois painéis independentes e levante antes do avião partir.',
+  openGraph: {
+    title: 'Aviator — Bombabet',
+    description:
+      'Jogue Aviator na Bombabet. Acompanhe o voo em tempo real, aposte com dois painéis independentes e levante antes do avião partir.',
+    siteName: 'Bombabet',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({
